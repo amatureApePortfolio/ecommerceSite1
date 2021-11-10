@@ -1,32 +1,7 @@
 [
   {
     "email": "test@test.com",
-    "password": "password"
-  },
-  {
-    "email": "test@test.com",
-    "password": "password"
-  },
-  {
-    "email": "test@test.com",
-    "password": "password"
-  },
-  {
-    "email": "test@test.com",
-    "password": "password"
-  },
-  {
-    "email": "test@test.com",
-    "password": "password"
-  },
-  {
-    "email": "test@test.com",
-    "password": "password",
-    "id": "d6b5a6d4"
-  },
-  {
-    "email": "test@test.com",
-    "password": "password",
-    "id": "900a5eab"
+    "id": "c6707643",
+    "password": "mypassword"
   }
 ]
