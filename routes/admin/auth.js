@@ -4,7 +4,11 @@ const { check, validationResult } = require('express-validator');
 const usersRepo = require('../../repositories/users');
 const signupTemplate = require('../../views/admin/auth/signup');
 const signinTemplate = require('../../views/admin/auth/signin');
-const { requireEmail, requirePassword, requirePasswordConfirmation } = require('./validators');
+const {
+  requireEmail,
+  requirePassword,
+  requirePasswordConfirmation
+} = require('./validators');
 
 const router = express.Router();
 
@@ -12,27 +16,24 @@ router.get('/signup', (req, res) => {
   res.send(signupTemplate({ req }));
 });
 
+router.post(
+  '/signup',
+  [requireEmail, requirePassword, requirePasswordConfirmation],
+  async (req, res) => {
+    const errors = validationResult(req);
 
-router.post('/signup', [
-  requireEmail,
-  requirePassword,
-  requirePasswordConfirmation
-], async (req, res) => {
-  const errors = validationResult(req);
-  console.log(errors);
+    if (!errors.isEmpty()) {
+      return res.send(signupTemplate({ req, errors }));
+    }
 
-  const { email, password, passwordConfirmation } = req.body;
+    const { email, password, passwordConfirmation } = req.body;
+    const user = await usersRepo.create({ email, password });
 
-  if (password !== passwordConfirmation) {
-    return res.send('Passwords must match')
+    req.session.userId = user.id;
+
+    res.send('Account created!!!');
   }
-
-  const user = await usersRepo.create({ email, password });
-
-  req.session.userId = user.id;
-
-  res.send('Account created!!!');
-});
+);
 
 router.get('/signout', (req, res) => {
   req.session = null;
@@ -40,7 +41,7 @@ router.get('/signout', (req, res) => {
 });
 
 router.get('/signin', (req, res) => {
-  res.send(signinTemplate())
+  res.send(signinTemplate());
 });
 
 router.post('/signin', async (req, res) => {
@@ -62,7 +63,7 @@ router.post('/signin', async (req, res) => {
 
   req.session.userId = user.id;
 
-  res.send('You are signed in!')
+  res.send('You are signed in!!!');
 });
 
 module.exports = router;
