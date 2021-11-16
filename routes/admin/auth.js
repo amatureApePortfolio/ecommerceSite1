@@ -44,7 +44,15 @@ router.get('/signin', (req, res) => {
   res.send(signinTemplate());
 });
 
-router.post('/signin', async (req, res) => {
+router.post('/signin', [
+  check('email')
+    .trim()
+    .normalizeEmail()
+    .isEmail(),
+  check('password')
+    .trim()
+    .isLength({ min: 4, max: 20 })
+], async (req, res) => {
   const { email, password } = req.body;
 
   const user = await usersRepo.getOneBy({ email });
